@@ -2,31 +2,173 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
+permissions:
+  contents: read
+
 jobs:
-  docs-lint:
-    name: Docs lint
+
+  # ============================================================
+  # Lint — markdown, YAML, Python (ruff), TypeScript (ESLint)
+  # ============================================================
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check architecture doc exists
-        run: |
-          test -f docs/architecture.md || \
-            (echo "ERROR: docs/architecture.md is missing" && exit 1)
-
+      # ── Markdown ──────────────────────────────────────────────
       - name: Install markdownlint-cli
         run: npm install -g markdownlint-cli
 
-      - name: Lint markdown
-        run: markdownlint docs/architecture.md --config .markdownlint.json || true
+      - name: Lint Markdown
+        run: markdownlint '**/*.md' --ignore 'node_modules/**' --config .markdownlint.json
 
-      - name: Check doc is non-empty
+      # ── Architecture doc sanity ───────────────────────────────
+      - name: Verify docs/architecture.md exists and is non-trivial
         run: |
+          test -f docs/architecture.md || \
+            { echo "ERROR: docs/architecture.md missing"; exit 1; }
           LINES=$(wc -l < docs/architecture.md)
           echo "docs/architecture.md has $LINES lines"
           [ "$LINES" -ge 50 ] || \
-            (echo "ERROR: architecture.md looks too short ($LINES lines)" && exit 1)
+            { echo "ERROR: docs/architecture.md is too short ($LINES lines)"; exit 1; }
+
+      # ── YAML ──────────────────────────────────────────────────
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Lint YAML
+        run: yamllint -d relaxed .github/
+
+      # ── Python / Ruff — skipped when backend has no .py files ─
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Lint Python
+        run: |
+          PY_COUNT=$(find backend -name "*.py" 2>/dev/null | wc -l)
+          if [ "$PY_COUNT" -gt 0 ]; then
+            ruff check backend/
+          else
+            echo "No Python source files found — skipping ruff"
+          fi
+
+      # ── TypeScript / ESLint — skipped when frontend not yet scaffolded ──
+      - name: Lint TypeScript
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend && npm ci --prefer-offline && npm run lint
+          else
+            echo "No frontend/package.json found — skipping ESLint"
+          fi
+
+  # ============================================================
+  # Test — Python (pytest), frontend (Jest / Vitest)
+  # ============================================================
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # ── Python tests ──────────────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run Python tests
+        run: |
+          TEST_COUNT=$(find backend \( -name "test_*.py" -o -name "*_test.py" \) 2>/dev/null | wc -l)
+          if [ "$TEST_COUNT" -gt 0 ]; then
+            pip install pytest
+            [ -f backend/requirements.txt ] && pip install -r backend/requirements.txt
+            pytest backend/ -v
+          else
+            echo "No Python test files found — skipping pytest"
+          fi
+
+      # ── Frontend tests ────────────────────────────────────────
+      - name: Run frontend tests
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend && npm ci --prefer-offline && npm test -- --watchAll=false
+          else
+            echo "No frontend/package.json found — skipping frontend tests"
+          fi
+
+  # ============================================================
+  # Dependency Scan — dep-review (PRs), pip-audit, npm audit
+  # ============================================================
+  dependency-scan:
+    name: Dependency Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # PR-only: flag newly introduced vulnerable or licence-blocked deps
+      - name: Dependency Review
+        if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+      # ── Python: pip-audit ─────────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Audit Python dependencies
+        run: |
+          if [ -f backend/requirements.txt ]; then
+            pip install pip-audit
+            pip-audit -r backend/requirements.txt
+          elif [ -f backend/pyproject.toml ]; then
+            pip install pip-audit
+            pip-audit --project backend/
+          else
+            echo "No Python requirements file found — skipping pip-audit"
+          fi
+
+      # ── JavaScript / TypeScript: npm audit ────────────────────
+      - name: Audit JS/TS dependencies
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend && npm audit --audit-level=high
+          else
+            echo "No frontend/package.json found — skipping npm audit"
+          fi
+
+  # ============================================================
+  # Secret Scan — Gitleaks over the full working tree
+  # ============================================================
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Gitleaks
+        env:
+          GITLEAKS_VERSION: "8.18.4"
+        run: |
+          wget -q \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            -O /tmp/gitleaks.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /usr/local/bin gitleaks
+          gitleaks version
+
+      - name: Scan for secrets
+        run: gitleaks detect --source . --redact --log-level info
