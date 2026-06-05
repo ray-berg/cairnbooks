@@ -63,6 +63,7 @@ from app.db.session import Base  # noqa: E402
 #   from app.domain.accounts import models  # noqa: F401
 #   from app.domain.users import models  # noqa: F401
 from app.domain import company  # noqa: F401
+from app.domain import customer  # noqa: F401
 
 target_metadata = Base.metadata
 
