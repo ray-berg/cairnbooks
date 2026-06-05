@@ -1,0 +1,135 @@
+# =============================================================================
+# CairnBooks .gitignore
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Secrets & environment files — NEVER commit these
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# -----------------------------------------------------------------------------
+# Python / Backend
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Testing & coverage
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Type checking
+.dmypy.json
+dmypy.json
+
+# Alembic (generated migration output — keep scripts, ignore cache)
+backend/alembic/__pycache__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# -----------------------------------------------------------------------------
+# Node.js / Frontend
+# -----------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js build output
+frontend/.next/
+frontend/out/
+
+# TypeScript build output
+*.tsbuildinfo
+frontend/next-env.d.ts
+
+# Testing
+frontend/coverage/
+frontend/.nyc_output/
+playwright-report/
+test-results/
+
+# Misc Node artifacts
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.pnp.*
+
+# -----------------------------------------------------------------------------
+# Docker
+# -----------------------------------------------------------------------------
+# Do NOT ignore docker-compose files — they belong in deploy/
+# Only ignore local override files
+docker-compose.override.yml
+
+# -----------------------------------------------------------------------------
+# IDEs & editors
+# -----------------------------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*.orig
+*~
+.DS_Store
+Thumbs.db
+
+# JetBrains
+*.iml
+*.iws
+*.ipr
+.shelf/
+
+# -----------------------------------------------------------------------------
+# Logs & temporary files
+# -----------------------------------------------------------------------------
+logs/
+*.log
+tmp/
+temp/
+.cache/
+
+# -----------------------------------------------------------------------------
+# Operating system
+# -----------------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
