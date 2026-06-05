@@ -2,7 +2,14 @@
 
 > Last updated: 2026-06-05  
 > Branch: `ops/staging-lxc`  
-> Status: **LXC up, Docker installed** ✅
+> Status: **⚠ Pending manager approval — see §3a**
+
+> ### Action required before merge
+> The NOCOS VMID 300 clone is **gated** (outside agent auto-approve range).
+> A manager must approve it at **https://dashboard.nocos.ai/dashboard**
+> (approval ID: `bd9404f0-7f5e-4c5f-8c26-872bcd83e95b`, correlation `mcp-d650df028c25`).
+> Once approved, run `docker_install(host="cairnbooks-staging")` to complete the setup
+> and flip the status line above to ✅.
 
 ---
 
