@@ -1,0 +1,26 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python tests (if present)
+        run: |
+          set -e
+          if [ -f pyproject.toml ] || [ -f requirements.txt ] || [ -f setup.py ]; then
+            python -m pip install --upgrade pip >/dev/null 2>&1 || true
+            pip install -e . >/dev/null 2>&1 || pip install -r requirements.txt >/dev/null 2>&1 || true
+            pip install pytest >/dev/null 2>&1 || true
+            if git ls-files '*test*.py' 'tests/*' | grep -q .; then python -m pytest -q; fi
+          fi
+      - name: Node tests (if present)
+        run: |
+          set -e
+          if [ -f package.json ]; then
+            npm ci >/dev/null 2>&1 || npm install >/dev/null 2>&1 || true
+            npm test --if-present
+          fi
