@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  docs-lint:
+    name: Docs lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check architecture doc exists
+        run: |
+          test -f docs/architecture.md || \
+            (echo "ERROR: docs/architecture.md is missing" && exit 1)
+
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Lint markdown
+        run: markdownlint docs/architecture.md --config .markdownlint.json || true
+
+      - name: Check doc is non-empty
+        run: |
+          LINES=$(wc -l < docs/architecture.md)
+          echo "docs/architecture.md has $LINES lines"
+          [ "$LINES" -ge 50 ] || \
+            (echo "ERROR: architecture.md looks too short ($LINES lines)" && exit 1)
