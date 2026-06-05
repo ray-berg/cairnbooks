@@ -45,6 +45,7 @@ out/
 .svelte-kit/
 dist/
 build/
+*.tsbuildinfo
 
 # Environment & secrets
 .env
