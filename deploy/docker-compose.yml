@@ -1,0 +1,83 @@
+# =============================================================================
+# CairnBooks — Docker Compose (skeleton)
+# Brings up the full service graph for local development.
+#
+# Usage:
+#   cp deploy/.env.example deploy/.env   # fill in secrets
+#   docker compose -f deploy/docker-compose.yml up
+#
+# Services:
+#   db        — PostgreSQL 16
+#   backend   — FastAPI placeholder (python:3.12-slim)
+#   frontend  — Next.js placeholder  (node:20-alpine)
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # Database
+  # ---------------------------------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-cairnbooks}
+      POSTGRES_USER: ${POSTGRES_USER:-cairnbooks_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cairnbooks_app} -d ${POSTGRES_DB:-cairnbooks}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ---------------------------------------------------------------------------
+  # Backend (placeholder — replace with real Dockerfile once app code exists)
+  # ---------------------------------------------------------------------------
+  backend:
+    image: python:3.12-slim
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-cairnbooks_app}:${POSTGRES_PASSWORD:-change-me}@db:5432/${POSTGRES_DB:-cairnbooks}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    # Placeholder: keeps the container alive so dependent services can start.
+    # Replace this with: build: ./backend  and  command: uvicorn app.main:app ...
+    command: >
+      sh -c "echo '[backend] placeholder — no app code yet' &&
+             python -m http.server 8000"
+
+  # ---------------------------------------------------------------------------
+  # Frontend (placeholder — replace with real Dockerfile once app code exists)
+  # ---------------------------------------------------------------------------
+  frontend:
+    image: node:20-alpine
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    # Placeholder: keeps the container alive so stack validation passes.
+    # Replace this with: build: ./frontend  and  command: node server.js
+    command: >
+      sh -c "echo '[frontend] placeholder — no app code yet' &&
+             npx --yes http-server -p 3000"
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  postgres_data:
+    driver: local
