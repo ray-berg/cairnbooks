@@ -9,11 +9,8 @@ required.  They verify:
 
 import uuid
 
-import pytest
-
 from cairnbooks.db import Base
 from cairnbooks.models.company import Company, Tenant
-
 
 # ---------------------------------------------------------------------------
 # Tenant
