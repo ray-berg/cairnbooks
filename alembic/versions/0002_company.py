@@ -93,6 +93,10 @@ def upgrade() -> None:
             name="fk_companies_tenant_id",
             ondelete="CASCADE",
         ),
+        sa.CheckConstraint(
+            "fiscal_year_end_month BETWEEN 1 AND 12",
+            name="ck_companies_fiscal_year_end_month",
+        ),
     )
     op.create_index("ix_companies_tenant_id", "companies", ["tenant_id"])
 

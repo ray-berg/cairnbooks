@@ -21,7 +21,7 @@ from __future__ import annotations
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, String, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -125,6 +125,13 @@ class Company(Base):
         nullable=False,
         default=_utcnow,
         onupdate=_utcnow,
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "fiscal_year_end_month BETWEEN 1 AND 12",
+            name="ck_companies_fiscal_year_end_month",
+        ),
     )
 
     tenant: Mapped[Tenant] = relationship("Tenant", back_populates="companies")

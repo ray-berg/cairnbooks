@@ -123,6 +123,11 @@ class TestCompanyModel:
         assert fk.column.table.name == "tenants"
         assert fk.column.name == "id"
 
+    def test_fiscal_year_check_constraint_defined(self) -> None:
+        """companies table must declare the fiscal_year_end_month check constraint."""
+        constraints = {c.name for c in Company.__table__.constraints}
+        assert "ck_companies_fiscal_year_end_month" in constraints
+
     def test_relationship_back_populates(self) -> None:
         """Tenant.companies and Company.tenant must be linked."""
         # Inspect mapper relationships
