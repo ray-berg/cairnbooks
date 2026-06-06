@@ -8,4 +8,4 @@ Import all model modules here so that:
 from cairnbooks.models.company import Company, Tenant  # noqa: F401
 from cairnbooks.models.user import User  # noqa: F401
 
-__all__ = ["Tenant", "Company", "User"]
+__all__ = ["Company", "Tenant", "User"]
