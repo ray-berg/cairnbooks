@@ -68,11 +68,8 @@ if _db_url:
 # ---------------------------------------------------------------------------
 from cairnbooks.db import Base  # noqa: E402
 
-# As domain model modules are added, import them here so autogenerate picks up
-# their table definitions.  For example:
-#
-#   from cairnbooks.domain.accounts import models  # noqa: F401
-#   from cairnbooks.domain.ledger import models    # noqa: F401
+# Import all model modules so Alembic autogenerate detects their tables.
+import cairnbooks.models  # noqa: F401  — registers Tenant + Company on Base.metadata
 
 target_metadata = Base.metadata
 
