@@ -17,12 +17,9 @@ from __future__ import annotations
 
 import uuid
 
-import pytest
-
 from cairnbooks.db import Base
 from cairnbooks.models.user import DEFAULT_ROLE, VALID_ROLES, User
 from cairnbooks.security.passwords import hash_password, verify_password
-
 
 # ---------------------------------------------------------------------------
 # Password hashing / verification
