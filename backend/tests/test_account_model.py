@@ -1,6 +1,9 @@
 """Unit tests for the Account model and default COA seed function.
 
 Uses an in-memory SQLite database so no live PostgreSQL instance is required.
+Covers: AccountType/NormalBalance enums, Account CRUD, parent-child tree,
+uniqueness constraint, contra accounts, seed idempotency, and
+normal-balance convention enforcement.
 """
 
 from __future__ import annotations

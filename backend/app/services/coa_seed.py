@@ -11,8 +11,9 @@ The COA follows a typical US-style numbering scheme:
   5000-5999  Expenses
 
 Header / summary accounts (no ``parent_id``) group the detail accounts beneath
-them.  The function is idempotent: it skips any account whose ``(company_id,
-code)`` pair already exists.
+them.  The function is **idempotent**: it skips any account whose
+``(company_id, code)`` pair already exists, so it is safe to call more than
+once (e.g. during re-seeding or testing).
 """
 
 from __future__ import annotations

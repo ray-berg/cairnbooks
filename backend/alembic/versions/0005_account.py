@@ -3,6 +3,12 @@
 Revision ID: 0005
 Revises: 0004
 Create Date: 2026-06-07 00:00:00.000000
+
+Creates:
+  * account_type  Postgres enum  (asset | liability | equity | income | expense)
+  * normal_balance Postgres enum (debit | credit)
+  * accounts table with self-referential parent_id FK and (company_id, code)
+    unique constraint.
 """
 
 import sqlalchemy as sa

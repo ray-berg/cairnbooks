@@ -1,4 +1,11 @@
-"""Account model — a node in the chart of accounts tree for a Company."""
+"""Account model — a node in the chart of accounts tree for a Company.
+
+Each :class:`Account` belongs to a :class:`~app.models.company.Company` and
+may reference a parent :class:`Account` to build a hierarchical chart of
+accounts (COA).  The five fundamental *types* map to their conventional
+*normal balances* (debit for assets/expenses, credit for
+liabilities/equity/income); contra accounts may override the default.
+"""
 
 from __future__ import annotations
 
