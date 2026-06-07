@@ -100,7 +100,7 @@ make build   # rebuild Docker images without starting
 
 ### Default dev credentials
 
-> ⚠️  These credentials are for local development only. Change them in any shared environment.
+> These credentials are for local development only. Change them in any shared environment.
 
 | Service | Username / Access Key | Password / Secret Key |
 |---|---|---|
@@ -142,9 +142,6 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 # Install the package in editable mode with dev extras
 pip install -e ".[dev]"
 
-# Copy and edit environment config
-cp .env.example .env               # if present; otherwise set vars manually
-
 # Run database migrations
 alembic upgrade head
 
@@ -166,14 +163,14 @@ ruff check . && ruff format --check .
 
 ### Frontend
 
-Requires Node.js ≥ 18.
+Requires Node.js >= 18.
 
 ```bash
 cd frontend
 
 npm install
-npm run dev          # Vite dev server with HMR → http://localhost:5173
-npm run build        # Production build → dist/
+npm run dev          # Vite dev server with HMR at http://localhost:5173
+npm run build        # Production build to dist/
 npm run test         # Vitest unit tests
 npm run lint         # ESLint
 ```
@@ -203,55 +200,54 @@ CairnBooks/
 │   │   ├── main.tsx        #   App entry point
 │   │   ├── App.tsx         #   Root component
 │   │   ├── components/     #   Shared UI components
-│   │   ├── pages/          #   Route-level page components
-│   │   └── api/            #   Generated TypeScript API client
+│   │   └── pages/          #   Route-level page components
 │   ├── Dockerfile
 │   └── package.json
 │
 ├── docs/
 │   └── architecture/
-│       ├── overview.md     #   System layers + data-flow quick reference
-│       └── ADR-0001-stack.md  # Technology stack decision record
+│       ├── overview.md        #   System layers + data-flow quick reference
+│       └── ADR-0001-stack.md  #   Technology stack decision record
 │
 ├── docker-compose.yml      # Full dev stack (Postgres, Redis, MinIO, API, UI)
 ├── Makefile                # Convenience targets: up, down, logs, ps, clean
 ├── LICENSE                 # MIT
-└── README.md               # ← you are here
+└── README.md               # this file
 ```
 
 ---
 
 ## Architecture
 
-CairnBooks uses a strict four-layer architecture that enforces accounting correctness and
-multi-tenancy at every level:
+CairnBooks uses a strict four-layer backend architecture that enforces accounting correctness
+and multi-tenancy at every level:
 
 ```
 Browser (React SPA)
-    │ HTTPS
-Caddy 2 (reverse proxy — TLS, rate-limiting, gzip)
-    │ /api/*                    │ /*
+    | HTTPS
+Caddy 2 (reverse proxy: TLS, rate-limiting, gzip)
+    | /api/*                    | /*
 FastAPI (Presentation)     Static React bundle
-    │
+    |
 Application Layer (services/)
-    │
-Domain Layer (domain/) ← pure Python, zero I/O
-    │
+    |
+Domain Layer (domain/) -- pure Python, zero I/O
+    |
 Infrastructure Layer (infrastructure/)
-    │           │              │
+    |           |              |
 PostgreSQL    Redis         MinIO / S3
 (ACID data)  (cache/broker) (file blobs)
-                │
+                |
            RQ / Arq Workers
 ```
 
 Dependencies flow **inward only** — the Domain layer never imports from FastAPI, SQLAlchemy,
-or Redis. This means every accounting rule is testable with zero infrastructure.
+or Redis. This means every accounting rule is unit-testable with zero infrastructure.
 
-For the full layer map, data-flow diagrams, multi-tenancy enforcement table, and
-architectural invariants, see **[docs/architecture/overview.md](docs/architecture/overview.md)**.
+For the full layer map, data-flow diagrams, multi-tenancy enforcement table, and architectural
+invariants see **[docs/architecture/overview.md](docs/architecture/overview.md)**.
 
-For the technology stack rationale and ADRs, see
+For the technology-stack rationale and decision records see
 **[docs/architecture/ADR-0001-stack.md](docs/architecture/ADR-0001-stack.md)**.
 
 ---
