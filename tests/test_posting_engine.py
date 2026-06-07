@@ -22,7 +22,7 @@ import asyncio
 import uuid
 from datetime import date
 from decimal import Decimal
-from unittest.mock import AsyncMock, MagicMock, call
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
