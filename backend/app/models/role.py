@@ -31,7 +31,6 @@ class RoleName(StrEnum):
     viewer = "viewer"
 
 
-# Descriptions keyed by RoleName so they live in one place.
 _BUILTIN_ROLES: list[dict[str, str]] = [
     {"name": RoleName.admin.value, "description": "Full administrative access"},
     {
@@ -60,7 +59,6 @@ class Role(Base):
         nullable=False,
     )
 
-    # ── Relationships ────────────────────────────────────────────────────────
     user_roles: Mapped[list[UserRole]] = relationship(
         "UserRole",
         back_populates="role",
@@ -71,22 +69,10 @@ class Role(Base):
         return f"<Role id={self.id!s} name={self.name!r}>"
 
 
-# ---------------------------------------------------------------------------
-# Seed helper
-# ---------------------------------------------------------------------------
-
-
 def seed_roles(session: sa.orm.Session) -> list[Role]:
     """Insert the three built-in roles if they do not already exist.
 
-    This function is **idempotent**: calling it multiple times is safe.
-
-    Args:
-        session: An active SQLAlchemy :class:`Session`.
-
-    Returns:
-        The list of :class:`Role` instances for admin, accountant, and viewer
-        (in that order), whether freshly created or already present.
+    Idempotent: safe to call multiple times.
     """
     roles: list[Role] = []
     for role_data in _BUILTIN_ROLES:

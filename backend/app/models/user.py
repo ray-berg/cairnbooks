@@ -53,7 +53,6 @@ class User(Base):
         nullable=False,
     )
 
-    # ── Relationships ────────────────────────────────────────────────────────
     user_roles: Mapped[list[UserRole]] = relationship(
         "UserRole",
         back_populates="user",

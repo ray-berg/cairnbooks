@@ -1,6 +1,6 @@
 """UserRole — association between a User, a Role, and a Tenant.
 
-A user can hold different roles in different tenants.  The composite primary
+A user can hold different roles in different tenants. The composite primary
 key (user_id, role_id, tenant_id) enforces that the same assignment cannot be
 inserted twice.
 """
@@ -21,8 +21,7 @@ if TYPE_CHECKING:
 
 
 class UserRole(Base):
-    """Associates a :class:`~app.models.user.User` with a
-    :class:`~app.models.role.Role` scoped to a specific tenant."""
+    """Associates a User with a Role scoped to a specific tenant."""
 
     __tablename__ = "user_roles"
 
@@ -45,7 +44,6 @@ class UserRole(Base):
         nullable=False,
     )
 
-    # ── Relationships ────────────────────────────────────────────────────────
     user: Mapped[User] = relationship("User", back_populates="user_roles")
     role: Mapped[Role] = relationship("Role", back_populates="user_roles")
 

@@ -9,7 +9,6 @@ import sqlalchemy as sa
 
 from alembic import op
 
-# ── Revision identifiers ────────────────────────────────────────────────────
 revision: str = "0003"
 down_revision: str | None = "0002"
 branch_labels = None
@@ -17,7 +16,6 @@ depends_on = None
 
 
 def upgrade() -> None:
-    # ── roles ────────────────────────────────────────────────────────────────
     op.create_table(
         "roles",
         sa.Column("id", sa.UUID(), nullable=False),
@@ -33,7 +31,6 @@ def upgrade() -> None:
         sa.UniqueConstraint("name", name=op.f("uq_roles_name")),
     )
 
-    # ── users ────────────────────────────────────────────────────────────────
     op.create_table(
         "users",
         sa.Column("id", sa.UUID(), nullable=False),
@@ -62,7 +59,6 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_users_email"), "users", ["email"], unique=True)
 
-    # ── user_roles ───────────────────────────────────────────────────────────
     op.create_table(
         "user_roles",
         sa.Column("user_id", sa.UUID(), nullable=False),
@@ -95,9 +91,7 @@ def upgrade() -> None:
         unique=False,
     )
 
-    # ── Seed built-in roles ──────────────────────────────────────────────────
-    # Use deterministic UUIDs so repeated downgrade+upgrade cycles produce the
-    # same primary-key values.
+    # Seed built-in roles with deterministic UUIDs
     op.bulk_insert(
         sa.table(
             "roles",
