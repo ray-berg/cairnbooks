@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 
 from cairnbooks.api.health import router as health_router
+from cairnbooks.api.item import router as item_router
 
 
 def create_app() -> FastAPI:
@@ -14,6 +15,7 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(health_router)
+    app.include_router(item_router)
 
     return app
 

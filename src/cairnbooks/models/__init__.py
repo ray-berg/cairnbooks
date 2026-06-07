@@ -7,5 +7,6 @@ Import all model modules here so that:
 
 from cairnbooks.models.account import Account, AccountType  # noqa: F401
 from cairnbooks.models.company import Company, Tenant  # noqa: F401
+from cairnbooks.models.item import Item  # noqa: F401
 
-__all__ = ["Account", "AccountType", "Tenant", "Company"]
+__all__ = ["Account", "AccountType", "Company", "Item", "Tenant"]
