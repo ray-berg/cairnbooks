@@ -26,16 +26,14 @@ API endpoint tests (TestClient + mocked AsyncSession):
 from __future__ import annotations
 
 import uuid
+from collections.abc import AsyncGenerator
 from datetime import UTC, datetime
-from typing import AsyncGenerator
 from unittest.mock import AsyncMock, MagicMock
 
-import pytest
 from starlette.testclient import TestClient
 
 from cairnbooks.db import Base
 from cairnbooks.models.bank_account import BankAccount
-
 
 # ---------------------------------------------------------------------------
 # Shared fixtures / helpers

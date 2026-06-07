@@ -16,8 +16,8 @@ rolled back on any exception.
 from __future__ import annotations
 
 import uuid
+from collections.abc import Sequence
 from datetime import datetime
-from typing import Optional, Sequence
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, ConfigDict
@@ -41,9 +41,9 @@ class BankAccountCreate(BaseModel):
     company_id: uuid.UUID
     gl_account_id: uuid.UUID
     name: str
-    account_number: Optional[str] = None
-    routing_number: Optional[str] = None
-    bank_name: Optional[str] = None
+    account_number: str | None = None
+    routing_number: str | None = None
+    bank_name: str | None = None
     currency: str = "USD"
     active: bool = True
 
@@ -51,13 +51,13 @@ class BankAccountCreate(BaseModel):
 class BankAccountUpdate(BaseModel):
     """Request body for a partial update — every field is optional."""
 
-    gl_account_id: Optional[uuid.UUID] = None
-    name: Optional[str] = None
-    account_number: Optional[str] = None
-    routing_number: Optional[str] = None
-    bank_name: Optional[str] = None
-    currency: Optional[str] = None
-    active: Optional[bool] = None
+    gl_account_id: uuid.UUID | None = None
+    name: str | None = None
+    account_number: str | None = None
+    routing_number: str | None = None
+    bank_name: str | None = None
+    currency: str | None = None
+    active: bool | None = None
 
 
 class BankAccountRead(BaseModel):
@@ -69,9 +69,9 @@ class BankAccountRead(BaseModel):
     company_id: uuid.UUID
     gl_account_id: uuid.UUID
     name: str
-    account_number: Optional[str] = None
-    routing_number: Optional[str] = None
-    bank_name: Optional[str] = None
+    account_number: str | None = None
+    routing_number: str | None = None
+    bank_name: str | None = None
     currency: str
     active: bool
     created_at: datetime
@@ -135,7 +135,7 @@ async def create_bank_account(
     summary="List bank accounts",
 )
 async def list_bank_accounts(
-    company_id: Optional[uuid.UUID] = Query(default=None, description="Filter by company"),
+    company_id: uuid.UUID | None = Query(default=None, description="Filter by company"),
     active_only: bool = Query(default=False, description="Return only active accounts"),
     db: AsyncSession = Depends(get_db),
 ) -> Sequence[BankAccount]:

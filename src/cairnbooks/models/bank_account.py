@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import uuid
 from datetime import UTC, datetime
-from typing import Optional
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import UUID
@@ -113,19 +112,19 @@ class BankAccount(Base):
         comment="Human-readable bank account name (e.g. 'Main Checking').",
     )
 
-    account_number: Mapped[Optional[str]] = mapped_column(
+    account_number: Mapped[str | None] = mapped_column(
         String(50),
         nullable=True,
         comment="Bank account number (plain or masked; e.g. last-4 digits).",
     )
 
-    routing_number: Mapped[Optional[str]] = mapped_column(
+    routing_number: Mapped[str | None] = mapped_column(
         String(20),
         nullable=True,
         comment="ABA routing / transit number.",
     )
 
-    bank_name: Mapped[Optional[str]] = mapped_column(
+    bank_name: Mapped[str | None] = mapped_column(
         String(255),
         nullable=True,
         comment="Name of the financial institution.",
