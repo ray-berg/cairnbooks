@@ -26,19 +26,39 @@ The MVP delivers the 24-item scope defined in the project description, including
 
 ### Prerequisites
 
-- Docker & Docker Compose
-- Node.js 20+
-- Python 3.12+
+- [Docker](https://docs.docker.com/get-docker/) ≥ 24 with the Compose plugin
 
-### Running Locally
+### Running the full stack
 
 ```bash
-docker compose up
+make up
 ```
 
-The API will be available at `http://localhost:8000` and the frontend at `http://localhost:5173`.
+| Service  | URL                              | Notes              |
+|----------|----------------------------------|--------------------|
+| API      | http://localhost:8000            | FastAPI + Swagger  |
+| Frontend | http://localhost:5173            | React (nginx)      |
+| MinIO    | http://localhost:9001            | S3 console         |
+| Postgres | `localhost:5432`                 | DB: `cairnbooks`   |
+| Redis    | `localhost:6379`                 |                    |
 
-### Development
+Other useful Make targets:
+
+```bash
+make logs    # stream logs from all services
+make ps      # show container status / health
+make down    # stop services (volumes kept)
+make clean   # stop + remove volumes (destructive)
+```
+
+Default credentials (dev only):
+
+| Service  | User / Access Key | Password / Secret Key |
+|----------|-------------------|-----------------------|
+| Postgres | `cairnbooks`      | `cairnbooks`          |
+| MinIO    | `cairnbooks`      | `cairnbooks_secret`   |
+
+### Local development (without Docker)
 
 #### Backend
 
