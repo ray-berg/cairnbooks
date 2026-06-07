@@ -1,0 +1,10 @@
+# Root-level pytest configuration so that `pytest -q` (the PM_CI_COMMAND)
+# works when invoked from the repository root.
+#
+# - testpaths: collect from backend/tests only
+# - pythonpath: adds backend/ to sys.path so `from app.xxx import yyy` resolves
+# - asyncio_mode: required by pytest-asyncio
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+pythonpath = ["backend"]
+asyncio_mode = "auto"
