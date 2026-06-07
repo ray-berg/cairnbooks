@@ -1,4 +1,4 @@
-"""BankAccount ORM model.
+"""BankAccount ORM model — bank account linked to a GL account.
 
 A BankAccount represents a real-world bank account belonging to a Company.
 Each BankAccount is linked to exactly one GL (General Ledger) Account from

@@ -1,4 +1,4 @@
-"""Tests for BankAccount model and CRUD endpoints.
+"""Tests for BankAccount model and CRUD endpoints (bank account linked to GL account).
 
 Coverage
 --------

@@ -1,4 +1,4 @@
-"""Create bank_accounts table.
+"""Create bank_accounts table (BankAccount linked to GL account).
 
 Revision ID: 0016
 Revises: 0005

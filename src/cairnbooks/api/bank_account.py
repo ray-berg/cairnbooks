@@ -1,4 +1,4 @@
-"""CRUD API endpoints for BankAccount.
+"""CRUD API endpoints for BankAccount (linked to GL account).
 
 Routes
 ------
