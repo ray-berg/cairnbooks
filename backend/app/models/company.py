@@ -12,6 +12,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db import Base
 
 if TYPE_CHECKING:
+    from app.models.account import Account
     from app.models.tenant import Tenant
 
 
@@ -59,6 +60,11 @@ class Company(Base):
     tenant: Mapped[Tenant] = relationship(
         "Tenant",
         back_populates="companies",
+    )
+    accounts: Mapped[list[Account]] = relationship(
+        "Account",
+        back_populates="company",
+        cascade="all, delete-orphan",
     )
 
     def __repr__(self) -> str:
