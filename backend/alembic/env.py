@@ -16,7 +16,8 @@ if config.config_file_name is not None:
 # ---------------------------------------------------------------------------
 # Import app settings + ORM Base for autogenerate support
 # ---------------------------------------------------------------------------
-from app.db import Base  # noqa: E402  # registers all models via their imports
+import app.models  # noqa: F401, E402  # registers all models with Base via their imports
+from app.db import Base  # noqa: E402
 from app.settings import settings  # noqa: E402
 
 target_metadata = Base.metadata
