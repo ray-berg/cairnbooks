@@ -31,7 +31,6 @@ from cairnbooks.models.account import (
 )
 from cairnbooks.seed.coa import default_coa_entries
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

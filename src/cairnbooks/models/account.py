@@ -45,7 +45,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import UTC, datetime
-from enum import Enum
+from enum import StrEnum
 
 from sqlalchemy import (
     Boolean,
@@ -73,7 +73,7 @@ def _utcnow() -> datetime:
 # ---------------------------------------------------------------------------
 
 
-class AccountType(str, Enum):
+class AccountType(StrEnum):
     """The five canonical account types in double-entry bookkeeping."""
 
     ASSET = "asset"
