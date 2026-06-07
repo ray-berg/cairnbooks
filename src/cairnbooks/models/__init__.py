@@ -7,5 +7,24 @@ Import all model modules here so that:
 
 from cairnbooks.models.account import Account, AccountType  # noqa: F401
 from cairnbooks.models.company import Company, Tenant  # noqa: F401
+from cairnbooks.models.journal import (  # noqa: F401
+    Journal,
+    JournalError,
+    JournalImbalancedError,
+    JournalLine,
+    JournalPostedError,
+    JournalStatus,
+)
 
-__all__ = ["Account", "AccountType", "Tenant", "Company"]
+__all__ = [
+    "Account",
+    "AccountType",
+    "Tenant",
+    "Company",
+    "Journal",
+    "JournalError",
+    "JournalImbalancedError",
+    "JournalLine",
+    "JournalPostedError",
+    "JournalStatus",
+]
