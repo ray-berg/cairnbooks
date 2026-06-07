@@ -7,7 +7,7 @@ Create Date: 2026-06-07 00:00:00.000000
 
 import sqlalchemy as sa
 
-from alembic import op
+from alembic import op  # noqa: E402
 
 # ── Revision identifiers ────────────────────────────────────────────────────
 revision: str = "0001"

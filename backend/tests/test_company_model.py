@@ -11,7 +11,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-import app.models  # noqa: F401 – side-effect: registers models with Base
+import app.models  # noqa: F401 - side-effect: registers models with Base
 from app.db import Base
 from app.models.company import Company
 from app.models.tenant import Tenant
@@ -25,8 +25,6 @@ def engine():
     _engine = create_engine(
         "sqlite:///:memory:",
         echo=False,
-        # SQLite-specific: allow same connection across threads (needed by
-        # some pytest-asyncio configs and nested Sessions).
         connect_args={"check_same_thread": False},
     )
     Base.metadata.create_all(_engine)
