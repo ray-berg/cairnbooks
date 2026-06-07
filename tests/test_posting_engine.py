@@ -13,7 +13,7 @@ Coverage
   balanced but empty; debit == credit == 0 passes — tested separately).
 - Multiple lines summing to the same total are accepted.
 - Mismatched totals by a single cent are rejected.
-- :func:`post_journal` is re-exported from the ledger package.
+- :func:`post_journal` is importable from the ledger package.
 """
 
 from __future__ import annotations
