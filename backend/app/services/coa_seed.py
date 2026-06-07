@@ -43,6 +43,7 @@ class _AccountDef:
     children: list[_AccountDef] = field(default_factory=list)
 
     def resolved_normal_balance(self) -> NormalBalance:
+        """Return explicit override or the conventional balance for this type."""
         if self.normal_balance is not None:
             return self.normal_balance
         return default_normal_balance(self.type)

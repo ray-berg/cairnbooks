@@ -2,8 +2,8 @@
 
 Uses an in-memory SQLite database so no live PostgreSQL instance is required.
 Covers: AccountType/NormalBalance enums, Account CRUD, parent-child tree,
-uniqueness constraint, contra accounts, seed idempotency, and
-normal-balance convention enforcement.
+uniqueness constraint (per company), contra accounts, seed idempotency,
+and normal-balance convention enforcement for all five account types.
 """
 
 from __future__ import annotations

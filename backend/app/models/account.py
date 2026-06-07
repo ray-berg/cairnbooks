@@ -147,5 +147,6 @@ class Account(Base):
     def __repr__(self) -> str:
         return (
             f"<Account id={self.id!s} code={self.code!r} "
-            f"name={self.name!r} type={self.type.value!r}>"
+            f"name={self.name!r} type={self.type.value!r} "
+            f"normal_balance={self.normal_balance.value!r}>"
         )

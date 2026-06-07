@@ -127,5 +127,6 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_accounts_parent_id"), table_name="accounts")
     op.drop_index(op.f("ix_accounts_company_id"), table_name="accounts")
     op.drop_table("accounts")
+    # Drop enum types after the table is gone.
     sa.Enum(name="normal_balance").drop(op.get_bind(), checkfirst=True)
     sa.Enum(name="account_type").drop(op.get_bind(), checkfirst=True)
