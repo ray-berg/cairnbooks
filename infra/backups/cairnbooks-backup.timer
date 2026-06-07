@@ -1,0 +1,22 @@
+# =============================================================================
+# CairnBooks — Backup Timer Unit
+#
+# Install to /etc/systemd/system/cairnbooks-backup.timer
+#
+# Activates cairnbooks-backup.service every night at 02:00 local time.
+# If a run is missed (e.g. system was off), it fires within 1 hour of boot.
+# =============================================================================
+[Unit]
+Description=CairnBooks nightly database backup — timer
+Documentation=https://github.com/ray-berg/CairnBooks/blob/main/docs/deployment/backups.md
+
+[Timer]
+# Fire at 02:00 every day
+OnCalendar=*-*-* 02:00:00
+# Allow up to 1 hour of delay to avoid thundering-herd on shared hardware
+RandomizedDelaySec=1h
+# Run a missed backup within 15 minutes of the next boot
+Persistent=true
+
+[Install]
+WantedBy=timers.target

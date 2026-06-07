@@ -1,0 +1,30 @@
+# =============================================================================
+# CairnBooks — Backup Service Unit
+#
+# Install to /etc/systemd/system/cairnbooks-backup.service
+# Triggered by cairnbooks-backup.timer (nightly at 02:00 local time).
+# =============================================================================
+[Unit]
+Description=CairnBooks nightly database backup
+Documentation=https://github.com/ray-berg/CairnBooks/blob/main/docs/deployment/backups.md
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+# Runs as root so it can exec into Docker containers
+User=root
+ExecStart=/bin/bash /opt/cairnbooks/infra/backups/backup.sh
+# Capture all output to journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cairnbooks-backup
+
+# Give the backup up to 2 hours to complete before systemd kills it
+TimeoutStartSec=7200
+
+# Fail if the script exits non-zero
+SuccessExitStatus=0
+
+[Install]
+WantedBy=multi-user.target
