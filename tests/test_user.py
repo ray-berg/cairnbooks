@@ -126,7 +126,6 @@ class TestUserModel:
 
     def test_email_is_indexed(self) -> None:
         """User.email must be indexed (via index=True on the column or explicit index)."""
-        # Either the column carries an index flag or a separate Index exists.
         col = User.__table__.c.email
         indexed_by_col = col.index
         indexed_by_table = any(
