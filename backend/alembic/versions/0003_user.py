@@ -96,8 +96,8 @@ def upgrade() -> None:
     )
 
     # ── Seed built-in roles ──────────────────────────────────────────────────
-    # Use deterministic UUIDs derived from the role names so repeated runs of
-    # the downgrade+upgrade cycle always produce the same primary-key values.
+    # Use deterministic UUIDs so repeated downgrade+upgrade cycles produce the
+    # same primary-key values.
     op.bulk_insert(
         sa.table(
             "roles",

@@ -125,7 +125,6 @@ def test_seed_roles_is_idempotent(session: Session) -> None:
     first = seed_roles(session)
     second = seed_roles(session)
     assert len(first) == len(second) == 3
-    # IDs must be the same objects (or at least same values)
     assert {r.id for r in first} == {r.id for r in second}
 
 

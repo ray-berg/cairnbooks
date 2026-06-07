@@ -50,4 +50,7 @@ class UserRole(Base):
     role: Mapped[Role] = relationship("Role", back_populates="user_roles")
 
     def __repr__(self) -> str:
-        return f"<UserRole user={self.user_id!s} role={self.role_id!s} tenant={self.tenant_id!s}>"
+        return (
+            f"<UserRole user={self.user_id!s} role={self.role_id!s} "
+            f"tenant={self.tenant_id!s}>"
+        )
