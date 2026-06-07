@@ -1,6 +1,7 @@
 # CairnBooks — Proxmox LXC Deployment
 
-This guide covers provisioning a Proxmox LXC container, installing Docker, registering a dynamic DNS hostname, and deploying the CairnBooks stack.
+This guide covers provisioning a Proxmox LXC container, installing Docker,
+registering a dynamic DNS hostname, and deploying the CairnBooks stack.
 
 ## Prerequisites
 

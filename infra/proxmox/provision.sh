@@ -13,6 +13,7 @@
 #   sudo -E bash infra/proxmox/provision.sh
 #
 # See docs/deployment/proxmox.md for full configuration reference.
+# Version: 1.0.0
 # =============================================================================
 set -euo pipefail
 
